@@ -1,13 +1,8 @@
-package org.bonn.se.ws14.uebung2;
+package org.bonn.se.ws15.uebung2;
 
 import java.io.PrintStream;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-
-import static org.bonn.se.ws14.uebung2.TestUtil.expectToEqual;
-import static org.bonn.se.ws14.uebung2.TestUtil.expectToThrow;
-import static org.bonn.se.ws14.uebung2.TestUtil.nullPrintStream;
 
 /**
  * Executable Container Test.
@@ -21,12 +16,12 @@ public class ContainerTest {
     }
 
     public static void testSaveAndSize() {
-        final Container container = new Container(new HashMap<Integer, Member>());
+        final Container container = new Container(new ArrayList<Member>());
         Throwable unexpectedException, expectedException;
         int memberIDCounter = 0;
 
         // Container is empty so expect size to be 0
-        expectToEqual(container.size(), "size of empty container", 0, null);
+        TestUtil.expectToEqual(container.size(), "size of empty container", 0, null);
 
         // Save one Member object and expect size to be 1
         final ClonableMember memberObj = new ClonableMember(++memberIDCounter); // Save to variable so we can use it later
@@ -36,7 +31,7 @@ public class ContainerTest {
         } catch (Throwable ex) {
             unexpectedException = ex;
         }
-        expectToEqual(container.size(), "size of container after saving first object", 1, unexpectedException);
+        TestUtil.expectToEqual(container.size(), "size of container after saving first object", 1, unexpectedException);
 
         // Save four more objects and expect size to be 5
         unexpectedException = null;
@@ -48,7 +43,7 @@ public class ContainerTest {
         } catch (Throwable ex) {
             unexpectedException = ex;
         }
-        expectToEqual(container.size(), "size of container after saving four more objects", 5, unexpectedException);
+        TestUtil.expectToEqual(container.size(), "size of container after saving four more objects", 5, unexpectedException);
 
         // Try to save an object with an ID that was already used and expect save() to throw a ContainerException
         unexpectedException = null;
@@ -60,7 +55,7 @@ public class ContainerTest {
         } catch (Throwable ex) {
             unexpectedException = ex;
         }
-        expectToThrow("saving an object with an already used ID", ContainerException.class, expectedException,
+        TestUtil.expectToThrow("saving an object with an already used ID", ContainerException.class, expectedException,
                 unexpectedException);
 
         // Try to save() a cloned object and expect it to throw a ContainerException
@@ -74,16 +69,16 @@ public class ContainerTest {
         } catch (Throwable ex) {
             unexpectedException = ex;
         }
-        expectToThrow("saving a cloned object", ContainerException.class, expectedException,
+        TestUtil.expectToThrow("saving a cloned object", ContainerException.class, expectedException,
                 unexpectedException);
     }
 
     private static void testContainsID() {
-        final Container container = new Container(new HashMap<Integer, Member>());
+        final Container container = new Container(new ArrayList<Member>());
         Throwable unexpectedException;
 
         // Try to find out if an arbitrary ID exists in an empty container and expect it to return false
-        expectToEqual(container.containsID(1), "contains ID 1 in empty container", false, null);
+        TestUtil.expectToEqual(container.containsID(1), "contains ID 1 in empty container", false, null);
 
         // Save an object and and expect it to return true
         unexpectedException = null;
@@ -94,11 +89,11 @@ public class ContainerTest {
         } catch (Throwable ex) {
             unexpectedException = ex;
         }
-        expectToEqual(container.containsID(memberID), "contains ID of saved object", true, unexpectedException);
+        TestUtil.expectToEqual(container.containsID(memberID), "contains ID of saved object", true, unexpectedException);
     }
 
     private static void testDelete() {
-        final Container container = new Container(new HashMap<Integer, Member>());
+        final Container container = new Container(new ArrayList<Member>());
         Throwable unexpectedException;
         final Integer memberID = 1;
         final Member memberObj = new ClonableMember(memberID);
@@ -106,7 +101,7 @@ public class ContainerTest {
         // Try to delete a Member object from an empty container and expect it to return a specific error message
         {
             final String expectedMsg = "Das Member-Objekt mit der ID " + memberID + " ist nicht vorhanden.";
-            expectToEqual(container.delete(memberObj), "message for deleting an object from an empty container",
+            TestUtil.expectToEqual(container.delete(memberObj), "message for deleting an object from an empty container",
                     expectedMsg, null);
         }
 
@@ -119,21 +114,21 @@ public class ContainerTest {
             } catch (Throwable ex) {
                 unexpectedException = ex;
             }
-            expectToEqual(container.delete(memberObj), "message for deleting a saved object", expectedMsg,
+            TestUtil.expectToEqual(container.delete(memberObj), "message for deleting a saved object", expectedMsg,
                     unexpectedException);
         }
     }
 
     private static void testDump() {
-        final Container container = new Container(new HashMap<Integer, Member>());
+        final Container container = new Container(new ArrayList<Member>());
         Throwable unexpectedException;
         int memberIDCounter = 0;
 
         // Use a PrintStream that just throws away all messages to keep test output clean
-        final PrintStream nullOut = nullPrintStream();
+        final PrintStream nullOut = TestUtil.nullPrintStream();
 
         // Dump an empty container and expect it to return an empty list of ID Strings
-        expectToEqual(container.dump(nullOut).isEmpty(), "checking emptiness of a dump list for an empty container", true,
+        TestUtil.expectToEqual(container.dump(nullOut).isEmpty(), "checking emptiness of a dump list for an empty container", true,
                 null);
 
         // Save 5 objects and expect it to return a set of dumps
@@ -149,6 +144,6 @@ public class ContainerTest {
         } catch (Throwable ex) {
             unexpectedException = ex;
         }
-        expectToEqual(container.dump(nullOut), "dumped list of 5 members", expectedDumps, unexpectedException);
+        TestUtil.expectToEqual(container.dump(nullOut), "dumped list of 5 members", expectedDumps, unexpectedException);
     }
 }

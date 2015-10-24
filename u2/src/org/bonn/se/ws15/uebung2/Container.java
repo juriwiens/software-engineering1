@@ -1,4 +1,4 @@
-package org.bonn.se.ws14.uebung2;
+package org.bonn.se.ws15.uebung2;
 
 import java.io.PrintStream;
 import java.util.*;
@@ -7,10 +7,10 @@ public class Container {
     /**
      * HashMap used as memory.
      */
-    private final HashMap<Integer, Member> map;
+    private final List<Member> list;
 
-    public Container(HashMap<Integer, Member> map) {
-        this.map = map;
+    public Container(List<Member> list) {
+        this.list = list;
     }
 
     /**
@@ -22,7 +22,7 @@ public class Container {
         final Integer id = obj.getID();
 
         if (!containsID(id)) {
-            map.put(id, obj);
+            list.add(obj);
         } else {
             throw new ContainerException(obj);
         }
@@ -37,7 +37,7 @@ public class Container {
         final Integer id = obj.getID();
 
         if (containsID(id)) {
-            map.remove(id);
+            list.remove(obj);
             return "Das Member-Objekt mit der ID " + id + " wurde erfolgreich gelöscht.";
         } else {
             return "Das Member-Objekt mit der ID " + id + " ist nicht vorhanden.";
@@ -52,11 +52,8 @@ public class Container {
     public List<String> dump(PrintStream out) {
         final List<String> strList = new ArrayList<String>();
 
-        // Get keys as a sorted list
-        final Collection<Member> objs = map.values();
-
         out.printf("Container Dump: ");
-        for (Member obj : objs) {
+        for (Member obj : list) {
             strList.add(obj.toString());
             out.print(obj.toString() + " ");
         }
@@ -69,7 +66,7 @@ public class Container {
      * @return number of contained objects
      */
     public int size() {
-        return map.size();
+        return list.size();
     }
 
     /**
@@ -78,6 +75,12 @@ public class Container {
      * @return boolean
      */
     public boolean containsID(Integer id) {
-        return map.containsKey(id);
+        for (Member obj : list) {
+            if (obj.getID().equals(id)) {
+                return true;
+            }
+        }
+
+        return false;
     }
 }

@@ -1,4 +1,4 @@
-package org.bonn.se.ws14.uebung2;
+package org.bonn.se.ws15.uebung2;
 
 public class ContainerException extends Exception {
     public ContainerException(Member obj) {
