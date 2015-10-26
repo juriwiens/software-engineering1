@@ -1,9 +1,10 @@
 package org.bonn.se.ws15.uebung3;
 
-public class ClonableMember implements Member, Cloneable {
+public class ClonableMember implements Member, Info, Cloneable {
     private final Integer id;
+    private String name;
 
-    public ClonableMember(Integer id) {
+    public ClonableMember(Integer id, String name) {
         this.id = id;
     }
 
@@ -37,11 +38,21 @@ public class ClonableMember implements Member, Cloneable {
 //        return cloned;
 
         // Use a simple and short solution
-        return new ClonableMember(id);
+        return new ClonableMember(id, name);
     }
 
-   @Override
+    @Override
     public String toString() {
         return getID().toString();
+    }
+
+    @Override
+    public String getName() {
+        return name;
+    }
+
+    @Override
+    public void setName(String name) {
+        this.name = name;
     }
 }
