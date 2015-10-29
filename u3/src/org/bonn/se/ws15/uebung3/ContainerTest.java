@@ -31,80 +31,83 @@ public class ContainerTest extends ExecutableTest {
         Throwable unexpectedException, expectedException;
         int memberIDCounter = 0;
 
-        // Clear the container's state
-        container.reset(Modus.ARRAY_LIST);
+        // Test with all modes
+        for (Modus modus : Modus.values()) {
+            // Clear the container's state
+            container.reset(modus);
 
-        // Container is empty so expect size to be 0
-        expectToEqual(container.size(), "size of empty container", 0, null);
+            // Container is empty so expect size to be 0
+            expectToEqual(container.size(), "size of empty container in modus " + modus, 0, null);
 
-        // Save one Member object and expect size to be 1
-        final ClonableMember memberObj = new ClonableMember(++memberIDCounter, Integer.toString(memberIDCounter)); // Save to variable so we can use it later
-        unexpectedException = null;
-        try {
-            container.save(memberObj);
-        } catch (Throwable ex) {
-            unexpectedException = ex;
-        }
-        expectToEqual(container.size(), "size of container after saving first object", 1, unexpectedException);
-
-        // Save four more objects and expect size to be 5
-        unexpectedException = null;
-        try {
-            container.save(new ClonableMember(++memberIDCounter, Integer.toString(memberIDCounter)));
-            container.save(new ClonableMember(++memberIDCounter, Integer.toString(memberIDCounter)));
-            container.save(new ClonableMember(++memberIDCounter, Integer.toString(memberIDCounter)));
-            container.save(new ClonableMember(++memberIDCounter, Integer.toString(memberIDCounter)));
-        } catch (Throwable ex) {
-            unexpectedException = ex;
-        }
-        expectToEqual(container.size(), "size of container after saving four more objects", 5, unexpectedException);
-
-        // Try to save an object with an ID that was already used and expect save() to throw a ContainerException
-        unexpectedException = null;
-        expectedException = null;
-        try {
-            container.save(new ClonableMember(memberIDCounter, Integer.toString(memberIDCounter)));
-        } catch (ContainerException ex) {
-            expectedException = ex;
-        } catch (Throwable ex) {
-            unexpectedException = ex;
-        }
-        expectToThrow("saving an object with an already used ID", ContainerException.class, expectedException,
-                unexpectedException);
-
-        // Try to save() a cloned object and expect it to throw a ContainerException
-        unexpectedException = null;
-        expectedException = null;
-        final Member clonedObj = memberObj.clone();
-        try {
-            container.save(clonedObj);
-        } catch (ContainerException ex) {
-            expectedException = ex;
-        } catch (Throwable ex) {
-            unexpectedException = ex;
-        }
-        expectToThrow("saving a cloned object", ContainerException.class, expectedException,
-                unexpectedException);
-
-        // Try to save an object that does not implement the Info interface and expect it to throw an
-        // IllegalArgumentException
-        unexpectedException = null;
-        expectedException = null;
-        final Member memberButNotInfo = new Member() {
-            @Override
-            public Integer getID() {
-                return null;
+            // Save one Member object and expect size to be 1
+            final ClonableMember memberObj = new ClonableMember(++memberIDCounter, Integer.toString(memberIDCounter)); // Save to variable so we can use it later
+            unexpectedException = null;
+            try {
+                container.save(memberObj);
+            } catch (Throwable ex) {
+                unexpectedException = ex;
             }
-        };
-        try {
-            container.save(memberButNotInfo);
-        } catch (IllegalArgumentException ex) {
-            expectedException = ex;
-        } catch (Throwable ex) {
-            unexpectedException = ex;
+            expectToEqual(container.size(), "size of container after saving first object in modus " + modus, 1, unexpectedException);
+
+            // Save four more objects and expect size to be 5
+            unexpectedException = null;
+            try {
+                container.save(new ClonableMember(++memberIDCounter, Integer.toString(memberIDCounter)));
+                container.save(new ClonableMember(++memberIDCounter, Integer.toString(memberIDCounter)));
+                container.save(new ClonableMember(++memberIDCounter, Integer.toString(memberIDCounter)));
+                container.save(new ClonableMember(++memberIDCounter, Integer.toString(memberIDCounter)));
+            } catch (Throwable ex) {
+                unexpectedException = ex;
+            }
+            expectToEqual(container.size(), "size of container after saving four more objects in modus " + modus, 5, unexpectedException);
+
+            // Try to save an object with an ID that was already used and expect save() to throw a ContainerException
+            unexpectedException = null;
+            expectedException = null;
+            try {
+                container.save(new ClonableMember(memberIDCounter, Integer.toString(memberIDCounter)));
+            } catch (ContainerException ex) {
+                expectedException = ex;
+            } catch (Throwable ex) {
+                unexpectedException = ex;
+            }
+            expectToThrow("saving an object with an already used ID in modus " + modus, ContainerException.class, expectedException,
+                    unexpectedException);
+
+            // Try to save() a cloned object and expect it to throw a ContainerException
+            unexpectedException = null;
+            expectedException = null;
+            final Member clonedObj = memberObj.clone();
+            try {
+                container.save(clonedObj);
+            } catch (ContainerException ex) {
+                expectedException = ex;
+            } catch (Throwable ex) {
+                unexpectedException = ex;
+            }
+            expectToThrow("saving a cloned object in modus " + modus, ContainerException.class, expectedException,
+                    unexpectedException);
+
+            // Try to save an object that does not implement the Info interface and expect it to throw an
+            // IllegalArgumentException
+            unexpectedException = null;
+            expectedException = null;
+            final Member memberButNotInfo = new Member() {
+                @Override
+                public Integer getID() {
+                    return null;
+                }
+            };
+            try {
+                container.save(memberButNotInfo);
+            } catch (IllegalArgumentException ex) {
+                expectedException = ex;
+            } catch (Throwable ex) {
+                unexpectedException = ex;
+            }
+            expectToThrow("saving an object that does not implement Info in modus " + modus, IllegalArgumentException.class,
+                    expectedException, unexpectedException);
         }
-        expectToThrow("saving an object that does not implement Info", IllegalArgumentException.class,
-                expectedException, unexpectedException);
     }
 
     private static void testContainsID() {
