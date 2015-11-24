@@ -2,7 +2,7 @@
 
 Autor: Juri Wiens, Matrikelnummer: 9023765
 
-#### (Positiver) Akzeptanztest des Use Case "Weiterleitung von Kompetenzanfragen"
+#### (Positiver) Akzeptanztest des Use Case "Jobangebot suchen"
 
 | Teilschritt der Testprozedur  | Das zu erwartende Ergebnis  |
 | ----------------------------- | --------------------------- |
