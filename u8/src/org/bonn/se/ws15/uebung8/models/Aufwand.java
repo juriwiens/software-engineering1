@@ -1,4 +1,6 @@
-package org.bonn.se.ws15.uebung8;
+package org.bonn.se.ws15.uebung8.models;
+
+import org.bonn.se.ws15.uebung8.utilities.FibonacciUtil;
 
 import java.io.Serializable;
 import java.math.BigDecimal;

@@ -1,4 +1,4 @@
-package org.bonn.se.ws15.uebung8;
+package org.bonn.se.ws15.uebung8.utilities;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;

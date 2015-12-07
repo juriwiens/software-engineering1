@@ -1,55 +1,23 @@
 package org.bonn.se.ws15.uebung8;
 
-import org.bonn.se.ws15.uebung8.commands.*;
+import org.bonn.se.ws15.uebung8.commands.Command;
+import org.bonn.se.ws15.uebung8.controllers.UserStoryMainCtrl;
+import org.bonn.se.ws15.uebung8.models.ListContainer;
+import org.bonn.se.ws15.uebung8.models.UserStory;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
 import java.util.ArrayList;
+import java.util.HashMap;
 
 public class UserStoryCLI {
-    private static String storeFileName = "data.ser";
+    public static void main(String[] args) {
+        final HashMap<String, Command> cmdMap = new HashMap<>();
+        final ListContainer<UserStory> userStoryContainer = new ListContainer<>(new ArrayList<UserStory>());
 
-    protected static final ListContainer<UserStory> userStoryContainer = new ListContainer<>(new ArrayList<>());
-
-    public static void main(String[] args) throws IOException {
-        run();
-    }
-
-    private static void run() throws IOException {
-        BufferedReader in = new BufferedReader(new InputStreamReader(System.in));
-        String s;
-
-        //noinspection InfiniteLoopStatement
-        while (true) {
-            System.out.print("UserStoryCLI > ");
-            s = in.readLine();
-
-            evalCommand(s);
-        }
-    }
-
-    private static void evalCommand(String cmd) throws IOException {
-        switch (cmd) {
-            case "enter":
-                Enter.run(userStoryContainer);
-                break;
-            case "store":
-                Store.run(userStoryContainer, storeFileName);
-                break;
-            case "load":
-                Load.run(userStoryContainer, storeFileName);
-                break;
-            case "dump":
-                Dump.run(userStoryContainer);
-                break;
-            case "help":
-                Help.run();
-                break;
-            case "exit":
-                System.exit(0);
-            default:
-                System.out.println("Ungültiger Befehl. Tipp: 'help' eingeben.");
-        }
+        final UserStoryMainCtrl mainCtrl = new UserStoryMainCtrl(
+                cmdMap,
+                Config.storeFileName,
+                userStoryContainer,
+                Config.maxUserStories);
+        mainCtrl.execute();
     }
 }
